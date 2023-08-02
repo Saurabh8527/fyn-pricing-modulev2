@@ -1,1 +1,1 @@
-# fyn-pricing-modulev2
+# pricing_module_v2
