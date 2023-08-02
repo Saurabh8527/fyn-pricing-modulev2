@@ -23,9 +23,12 @@ def calculate_total_price(request):
         except (ValueError, TypeError):
             return JsonResponse({'error': 'Invalid parameter values.'}, status=400)
 
-        config = get_object_or_404(PricingConfiguration, is_enabled=True)
-        day_of_week = date_of_trip.strftime('%a')
+        try:
+            config = PricingConfiguration.objects.get(is_enabled=True)
+        except:
+            return JsonResponse({"total_price": 0, "message": "No pricing configuration is active"}, status=200)
 
+        day_of_week = date_of_trip.strftime('%a')
         distance_base_price = get_distance_base_price(
             config, total_distance, day_of_week)
         time_multiplier_factor = get_time_multiplier_factor(config, trip_time)
